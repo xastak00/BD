@@ -30,28 +30,11 @@ public class ParkMainPanel extends javax.swing.JFrame {
     private void initComponents() {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        listOfObjects = new javax.swing.JPanel();
-        informace11 = new cz.vutbr.fit.pdb.interf.Informace1();
         registrace1 = new cz.vutbr.fit.pdb.interf.Registrace();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        javax.swing.GroupLayout listOfObjectsLayout = new javax.swing.GroupLayout(listOfObjects);
-        listOfObjects.setLayout(listOfObjectsLayout);
-        listOfObjectsLayout.setHorizontalGroup(
-            listOfObjectsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 717, Short.MAX_VALUE)
-        );
-        listOfObjectsLayout.setVerticalGroup(
-            listOfObjectsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 512, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("Seznam objektů", listOfObjects);
-
-        informace11.setToolTipText("Informace");
-        jTabbedPane1.addTab("Informace", informace11);
-        jTabbedPane1.addTab("tab3", registrace1);
+        jTabbedPane1.addTab("Registrace", registrace1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -70,9 +53,7 @@ public class ParkMainPanel extends javax.swing.JFrame {
  
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private cz.vutbr.fit.pdb.interf.Informace1 informace11;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JPanel listOfObjects;
     private cz.vutbr.fit.pdb.interf.Registrace registrace1;
     // End of variables declaration//GEN-END:variables
 }

@@ -9,6 +9,7 @@ package cz.vutbr.fit.pdb.hlavni;
  *Hlavni trida zajistujici vykreslení hlavniho okna
  * @author Iuliia Ogloblina
  */
+import cz.vutbr.fit.pdb.interf.ParkMainPanel;
 public class AttractionPark {
     
 /*
