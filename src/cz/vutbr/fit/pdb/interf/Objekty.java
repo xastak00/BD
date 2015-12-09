@@ -15,14 +15,14 @@ import javax.swing.JLabel;
 
 
 /**
- *
+ * Zobrazeni obrazku
  * @author Olga
  */
 public class Objekty extends JLabel{ //http://www.javadocexamples.com/javax/swing/JLabel/setVerticalTextPosition(int%20textPosition).html
     
     private boolean active = false;
     private int index;
-    private String path = null;
+    private String cesta = null;
     private boolean focusable = true;
     private Image im; 
     private Double score = 0.0;
@@ -53,7 +53,7 @@ public class Objekty extends JLabel{ //http://www.javadocexamples.com/javax/swin
         setText("");
         setVerticalTextPosition(JLabel.BOTTOM);
         setHorizontalTextPosition(JLabel.CENTER);
-        //setIcon(o);
+       // setImage(o);
         im = o;
     }
     
@@ -61,12 +61,12 @@ public class Objekty extends JLabel{ //http://www.javadocexamples.com/javax/swin
      * Prenastavi aktualni obrazek
      * @param o je obrazek
      */
-    public void setNewIcon(Image o){
+    public void setNewImage(Image o){
         im = o;
     }
     
      /**
-     * Zpracovani kliku na ikonu
+     * Zpracovani kliku na obrazek
      * @param evt event
      */
     public void ObrazkyMouseKlick(java.awt.event.MouseEvent evt){
@@ -126,16 +126,16 @@ public class Objekty extends JLabel{ //http://www.javadocexamples.com/javax/swin
      * Nastavi cestu pro nacteni obrazku do DataBaze
      * @param p cesta
      */
-    public void setPath(String p){
-        this.path = p;
+    public void setCesta(String p){
+        this.cesta = p;
     }
     
     /**
      * Vraci 
      * @return cesta
      */
-    public String getPath(){
-        return this.path;
+    public String getCesta(){
+        return this.cesta;
     }
     
     /**
