@@ -11,8 +11,9 @@ package cz.vutbr.fit.pdb.interf;
  */
 public class SeznamObjektu extends javax.swing.JPanel {
 
-    private ParkMainPanel mainPanel;
-    public void setParkMainPanel(ParkMainPanel mainPanel) {
+    private ParkMainPanel1 mainPanel;
+    
+    public void setParkMainPanel(ParkMainPanel1 mainPanel) {
         this.mainPanel = mainPanel;
     }
     /**

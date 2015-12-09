@@ -5,13 +5,13 @@
  */
 package cz.vutbr.fit.pdb.hlavni;
 
-import cz.vutbr.fit.pdb.interf.ParkMainPanel;
+import cz.vutbr.fit.pdb.interf.ParkMainPanel1;
 
 /**
  *Hlavni trida zajistujici vykreslení hlavniho okna
  * @author Iuliia Ogloblina
  */
-import cz.vutbr.fit.pdb.interf.ParkMainPanel;
+import cz.vutbr.fit.pdb.interf.ParkMainPanel1;
 public class AttractionPark {
     
 /*
@@ -19,8 +19,8 @@ public class AttractionPark {
     * @author Iuliia Ogloblina
     */
  public static void main(String[] args) {
-        ParkMainPanel park = new ParkMainPanel();
-        park.setLocationRelativeTo(null);
-        park.setVisible(true); /* метод, с помощью которого задается видимость */
+      //  ParkMainPanel1 park = new ParkMainPanel1();
+      //  park.setLocationRelativeTo(null);
+       // park.setVisible(true); /* метод, с помощью которого задается видимость */
     }
 }

@@ -23,10 +23,10 @@ import java.io.File;
 public class Registrace extends javax.swing.JPanel {
 
 
-private ParkMainPanel mainPanel;
+private ParkMainPanel1 mainPanel;
 
 
-  public void setParkMainPanel(ParkMainPanel mainPanel) {
+  public void setParkMainPanel(ParkMainPanel1 mainPanel) {
         this.mainPanel = mainPanel;
     }
     /**

@@ -9,6 +9,10 @@ import cz.vutbr.fit.pdb.hlavni.DataBase;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import oracle.jdbc.OracleResultSet;
 import oracle.jdbc.pool.OracleDataSource;
 
 /**
@@ -17,26 +21,43 @@ import oracle.jdbc.pool.OracleDataSource;
  */
 public class Informace1 extends javax.swing.JPanel {
 
-    private ParkMainPanel mainPanel;
+    private ParkMainPanel1 mainPanel;
     /**
      * @param mainPanel
      * Creates new form Informace1
      */
-    public void setParkMainPanel(ParkMainPanel mainPanel) {
+    public void setParkMainPanel(ParkMainPanel1 mainPanel) {
         this.mainPanel = mainPanel;
     }
-    public Informace1() {
+    public Informace1() throws SQLException {
         initComponents();
+        Typ_Combobox();
     }
-public void Typ_Combobox () throws SQLException ; {
+    
+    /**
+     *
+     * @throws SQLException
+     */
+    public void Typ_Combobox () throws SQLException  {
     OracleDataSource ods = DataBase.getConnection();
     try (Connection conn = ods.getConnection();)
     {
-         conn.setAutoCommit(false);
-         try (PreparedStatement stmt = conn.prepareStatement("SELECT * FROM "); )
+        conn.setAutoCommit(false);
+        
+         try (PreparedStatement stmt = conn.prepareStatement("SELECT * FROM type_bilding ");)
+         {
+              OracleResultSet rs = (OracleResultSet) stmt.executeQuery();
+              while(rs.next()){
+                  String typ_stavba = rs.getString("type_bildingcol");
+                  jComboBox1.addItem(typ_stavba);
+              }
+    }catch (Exception e){
+        JOptionPane.showMessageDialog(null,e);
     }
+}       catch (SQLException ex) {
+            Logger.getLogger(Informace1.class.getName()).log(Level.SEVERE, null, ex);
+        }
 }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -201,6 +222,11 @@ public void Typ_Combobox () throws SQLException ; {
         );
 
         jButton2.setText("Nový plán zaměstnanců");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Změnit rozvrh budovy");
 
@@ -269,7 +295,7 @@ public void Typ_Combobox () throws SQLException ; {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(hlavníOknonInformace, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(hlavníOknonInformace, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -280,6 +306,10 @@ public void Typ_Combobox () throws SQLException ; {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
