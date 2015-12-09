@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;//https://docs.oracle.com/javase/tutorial/collections/interfaces/map.html
+import javax.swing.ImageIcon;
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
 import oracle.jdbc.pool.OracleDataSource;//http://docs.oracle.com/cd/E11882_01/appdev.112/e13995/oracle/jdbc/pool/OracleDataSource.html
@@ -108,7 +109,7 @@ public class Obrazky extends Base {
      * @return Obrazky objektu - klic je ID obrazku v DataBase, hodnota je objekt typu Objekty.
      * @throws SQLException
      */
- /*   public Map<Integer, Objekty> getImagesObjektu(int objekt) throws SQLException {
+    public Map<Integer, Objekty> getImagesObjektu(int objekt) throws SQLException {
     
         Map<Integer, Objekty> result = new HashMap<>();
         
@@ -124,7 +125,7 @@ public class Obrazky extends Base {
                 OrdImage img = (OrdImage) rs.getORAData("img", OrdImage.getORADataFactory());
                 byte[] tmp = img.getDataInByteArray();
                 
-                Image o = new Image (tmp);          
+                ImageIcon o = new ImageIcon (tmp);          
                 Objekty tmpImage = new Objekty(o);
                 result.put(rs.getInt("id"), tmpImage);
             }
@@ -134,7 +135,7 @@ public class Obrazky extends Base {
         }
         
         return result;
-    }*/
+    }
 
       /**
      * Vratime obrazek se zadanym ID.

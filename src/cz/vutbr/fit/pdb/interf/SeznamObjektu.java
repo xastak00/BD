@@ -5,8 +5,26 @@
  */
 package cz.vutbr.fit.pdb.interf;
 
+import cz.vutbr.fit.pdb.Base.Bilding;
+import cz.vutbr.fit.pdb.Base.Obrazky;
+import java.awt.Color;
+import java.sql.SQLException;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
+
+
+
+
 /**
- *
+ * Zobrazovani obrazku se stavbami
  * @author Olga
  */
 public class SeznamObjektu extends javax.swing.JPanel {
@@ -18,11 +36,112 @@ public class SeznamObjektu extends javax.swing.JPanel {
     }
     /**
      * Creates new form SeznamObjektu
+     * Konstruktor
      */
     public SeznamObjektu() {
         initComponents();
     }
+    
+    /**
+     * Obnovime obrazky
+     */
+        private Map<Integer, Objekty> updateImages(int Bilding){
+        Map<Integer, Objekty> result = null;
+        try {
+            result =  Obraz.getImagesObjektu(Bilding);
+        } catch (SQLException e) {
+            Logger.getLogger(SeznamObjektu.class.getName()).log(Level.SEVERE, null, e);
+            return null;
+        }
+        return result;
+    }
+    
+     /**
+     * Nastavime novy obrazek
+     * @param o obrazek
+     * @param nula pokud neni zadny obrazek 
+     */
+    public void setNewImage (ImageIcon o, boolean nula){
+        if(o != null){
+            if(nula) {
+                obrazek.setText("No IMAGE");
+                obrazek.setFocus(false);
+                Index.setText("Index: 0/0");
+            } else {
+                obrazek.setText("");
+                obrazek.setFocus(true);
+            }
+            obrazek.setVisible(true);
+            obrazek.setIcon(o);
+            obrazek.setIndex(Bilding);
+            Kontejner.add(obrazek);
+            Kontejner.revalidate();
+        }
+    }
+ 
+    /**
+     * Zmena indexu
+     */
+    private void getPristiImage() {
+        if(AktualniObrazky != null) {
+            if(List!=null && !List.isEmpty() && aktIndex < List.size()-1) {
+                aktIndex += 1;
+                Map.Entry<Integer, Objekty> novyItem = List.get(aktIndex);
+                o = novyItem.getValue().getObjekty();
+                Smazat.setEnabled(true);
+                Otocit.setEnabled(true);
+                obrazek.setIndex(novyItem.getKey());
+                setNewImage(o, false);
+                Index.setText("Index: "+(aktIndex+1)+"/"+List.size());
+            }
+        }
+    }
+    
+     /**
+     * Zmena indexu
+     */
+    private void getMinulyImage() {
+        if(AktualniObrazky != null) {
+            if(List!=null && !List.isEmpty() && aktIndex > 0) {
+                aktIndex -= 1;
+                Map.Entry<Integer, Objekty> novyItem = List.get(aktIndex);
+                o = novyItem.getValue().getObjekty();
+                Smazat.setEnabled(true);
+                Otocit.setEnabled(true);
+                obrazek.setIndex(novyItem.getKey());
+                setNewImage(o, false);
+                Index.setText("Index: "+(aktIndex+1)+"/"+List.size());
+            } 
+        }
+    }
+    
+     /**
+     * Obnovime seznam combboxu - on nacte znova data z db
+     */
+    public void updateCombo(){
+        bilding_dbId = new HashMap<>();
+        Bilding stavba = new Bilding();
 
+        try {
+            int i = 0;
+            Map<Integer, String> list = stavba.getList();
+
+            String[] items = new String[list.size() + 1];
+            items[i++] = "";
+            for (Map.Entry<Integer, String> entry : list.entrySet()) {
+                items[i] = entry.getValue();
+                bilding_dbId.put(entry.getKey(), i);
+                i++;
+            }
+            ComBox = items;
+        } catch (SQLException e) {
+            ComBox = new String[]{"chyba při načítání.."};
+        }
+        ComboBox.setModel(new DefaultComboBoxModel(ComBox));
+        ComboBox.setSelectedIndex(0);
+        obrazek.setVisible(false);
+        obrazek.setIcon(null);
+    }
   
     /**
      * This method is called from within the constructor to initialize the form.
@@ -33,55 +152,72 @@ public class SeznamObjektu extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextField1 = new javax.swing.JTextField();
-        jPanel1 = new javax.swing.JPanel();
+        Kontejner = new javax.swing.JPanel();
         jScrollBar1 = new javax.swing.JScrollBar();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        Smazat = new javax.swing.JButton();
+        Ulozit = new javax.swing.JButton();
+        Pridat = new javax.swing.JButton();
+        Index = new javax.swing.JLabel();
+        Otocit = new javax.swing.JButton();
+        ComboBox = new javax.swing.JComboBox();
+        Sprava = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
 
-        jTextField1.setForeground(new java.awt.Color(204, 204, 204));
-        jTextField1.setText("Search");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout KontejnerLayout = new javax.swing.GroupLayout(Kontejner);
+        Kontejner.setLayout(KontejnerLayout);
+        KontejnerLayout.setHorizontalGroup(
+            KontejnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, KontejnerLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jScrollBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
+        KontejnerLayout.setVerticalGroup(
+            KontejnerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
         );
 
-        jButton1.setText("Smazat");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        Smazat.setText("Smazat");
+        Smazat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                SmazatActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Ulozit");
+        Ulozit.setText("Ulozit");
 
-        jButton3.setText("Přidat");
+        Pridat.setText("Přidat");
 
-        jLabel1.setText("Index 0/0");
+        Index.setText("Index 0/0");
 
-        jButton4.setText("Otočit");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        Otocit.setText("Otočit");
+        Otocit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                OtocitActionPerformed(evt);
             }
         });
+
+        ComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        ComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ComboBoxActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Vyberte obrázek, levym tlačítkem myši.");
+
+        javax.swing.GroupLayout SpravaLayout = new javax.swing.GroupLayout(Sprava);
+        Sprava.setLayout(SpravaLayout);
+        SpravaLayout.setHorizontalGroup(
+            SpravaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(SpravaLayout.createSequentialGroup()
+                .addGap(210, 210, 210)
+                .addComponent(jLabel1)
+                .addContainerGap(226, Short.MAX_VALUE))
+        );
+        SpravaLayout.setVerticalGroup(
+            SpravaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -90,67 +226,162 @@ public class SeznamObjektu extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(Sprava, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(Smazat, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(Otocit, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(Pridat, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(Ulozit, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(Kontejner, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(ComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(1, 1, 1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 16, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(Index, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 28, 28))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addGap(18, 18, 18)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(ComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(Index, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(3, 3, 3)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(Kontejner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(Sprava, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Smazat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Otocit)
+                    .addComponent(Pridat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Ulozit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void SmazatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SmazatActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
-
-    
+         if(obrazek.isActive()){
+            Sprava.setVisible(false);
+            obrazek.setVisible(false);
+            obrazek.setIcon(null);
+            obrazek.setBorder(null);
+            try {
+                Obraz.delete(obrazek.getIndex());
+                System.out.println("Smazat obrazek: "+obrazek.getIndex());
+                Objekty remove = AktualniObrazky.remove(obrazek.getIndex());
+                List = new ArrayList<>(AktualniObrazky.entrySet());
+                List.remove(aktIndex);
+            } catch (SQLException e) {
+                Logger.getLogger(Working.class.getName()).log(Level.SEVERE, null, e);
+            }
+            if(List != null && !List.isEmpty() && aktIndex < List.size()-1){
+                getPristiImage();
+            } else if(List != null && !List.isEmpty() && aktIndex > 0){
+                getMinulyImage();
+            } else {
+                String path = "/images/Null.png";
+                ImageIcon im = new ImageIcon(getClass().getResource(path));
+                Smazat.setEnabled(false);
+                Otocit.setEnabled(false);
+                setNewImage(im, true);
+            }
+        } else {
+            Sprava.setVisible(true);
+            Sprava.setBackground(Color.red);
+        }                                                       
+    }//GEN-LAST:event_SmazatActionPerformed
    
+    private void OtocitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OtocitActionPerformed
+        // TODO add your handling code here:       
+         if(obrazek.isActive()){
+            try {
+                Sprava.setVisible(false);
+                Obraz.rotateImage(obrazek.getIndex());
+                ImageIcon im = new ImageIcon(Obraz.getImage(obrazek.getIndex()));
+                obrazek.setNewImage(im);
+                setNewImage(im, false);
+                Map.Entry<Integer, Objekty> en = new AbstractMap.SimpleEntry<Integer, Objekty>(obrazek.getIndex(), obrazek);
+                AktualniObrazky = updateImages(Bilding);
+                List = new ArrayList<>(AktualniObrazky.entrySet());
+                List.set(aktIndex, en);
+            } catch (SQLException ex) {
+                Logger.getLogger(SeznamObjektu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            Sprava.setVisible(true);
+            Sprava.setBackground(Color.red);
+        }
+    }//GEN-LAST:event_OtocitActionPerformed
 
+    private void ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxActionPerformed
+        // TODO add your handling code here:
+        JComboBox cb = (JComboBox) evt.getSource();
+        String ComBox = (String) cb.getSelectedItem();
+        List = null;
+        Sprava.setVisible(false);
+        if(!ComBox.equals("")){
+            String substring = ComBox.substring(0, ComBox.indexOf(" "));
+            Bilding = Integer.parseInt(substring);
+            System.out.println(Bilding);
+            boolean nula = false;
+            AktualniObrazky = updateImages(Bilding);
+            if(AktualniObrazky.isEmpty()) {
+                System.out.println("NULL");
+                String path = "/images/Null.png";
+                o = new ImageIcon(getClass().getResource(path));
+                Smazat.setEnabled(false);
+                Otocit.setEnabled(false);
+                nula = true;
+            } else {
+                
+                List = new ArrayList<>(AktualniObrazky.entrySet());
+                aktIndex = 0;
+                Map.Entry<Integer, Objekty> entry = List.get(aktIndex);
+                o = entry.getValue().getObjekty();
+                obrazek.setIndex(entry.getKey());
+                Smazat.setEnabled(true);
+                Otocit.setEnabled(true);
+                Index.setText("Index: "+(aktIndex+1)+"/"+(List.size()));
+            }
+            setNewImage(o,nula);
+        } else {
+            obrazek.setVisible(false);
+            obrazek.setIcon(null);
+            obrazek.setText("");
+            Index.setText("Index: 0/0");
+        }
+    }//GEN-LAST:event_ComboBoxActionPerformed
+
+    private ImageIcon o;
+    private Obrazky Obraz;  
+    private Objekty obrazek;
+    private Map<Integer, Objekty> AktualniObrazky;
+    private int Bilding;
+    private List<Map.Entry<Integer, Objekty>> List;
+    private Integer aktIndex;
+    private String[] ComBox;
+    private Map<Integer, Integer> bilding_dbId;
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JComboBox ComboBox;
+    private javax.swing.JLabel Index;
+    private javax.swing.JPanel Kontejner;
+    private javax.swing.JButton Otocit;
+    private javax.swing.JButton Pridat;
+    private javax.swing.JButton Smazat;
+    private javax.swing.JPanel Sprava;
+    private javax.swing.JButton Ulozit;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollBar jScrollBar1;
-    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
