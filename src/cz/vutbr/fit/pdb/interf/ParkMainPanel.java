@@ -40,11 +40,11 @@ public class ParkMainPanel extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGap(0, 722, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addGap(0, 540, Short.MAX_VALUE)
         );
 
         pack();
@@ -53,7 +53,5 @@ public class ParkMainPanel extends javax.swing.JFrame {
  
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTabbedPane jTabbedPane1;
-    private cz.vutbr.fit.pdb.interf.Registrace registrace1;
     // End of variables declaration//GEN-END:variables
 }

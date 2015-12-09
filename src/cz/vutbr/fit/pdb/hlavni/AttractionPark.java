@@ -5,6 +5,8 @@
  */
 package cz.vutbr.fit.pdb.hlavni;
 
+import cz.vutbr.fit.pdb.interf.ParkMainPanel;
+
 /**
  *Hlavni trida zajistujici vykreslení hlavniho okna
  * @author Iuliia Ogloblina

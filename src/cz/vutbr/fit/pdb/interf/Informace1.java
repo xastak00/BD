@@ -5,6 +5,12 @@
  */
 package cz.vutbr.fit.pdb.interf;
 
+import cz.vutbr.fit.pdb.hlavni.DataBase;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import oracle.jdbc.pool.OracleDataSource;
+
 /**
  *
  * @author Iuliia
@@ -22,6 +28,15 @@ public class Informace1 extends javax.swing.JPanel {
     public Informace1() {
         initComponents();
     }
+public void Typ_Combobox () throws SQLException ; {
+    OracleDataSource ods = DataBase.getConnection();
+    try (Connection conn = ods.getConnection();)
+    {
+         conn.setAutoCommit(false);
+         try (PreparedStatement stmt = conn.prepareStatement("SELECT * FROM "); )
+    }
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -254,9 +269,7 @@ public class Informace1 extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(hlavníOknonInformace, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 77, Short.MAX_VALUE))
+            .addComponent(hlavníOknonInformace, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

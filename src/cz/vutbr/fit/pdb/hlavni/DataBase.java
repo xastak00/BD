@@ -9,6 +9,7 @@ package cz.vutbr.fit.pdb.hlavni;
 
 import cz.vutbr.fit.pdb.system.Identifikace;
 import cz.vutbr.fit.pdb.system.Identifikace1;
+import cz.vutbr.fit.pdb.system.Loader;
 import java.sql.SQLException;
 import java.util.Properties;
 import oracle.jdbc.pool.OracleDataSource;
@@ -23,10 +24,16 @@ public class DataBase {
 private static Properties properties = null;
 private static Identifikace identifikace = null;
 
+
+    public DataBase() {
+        Loader loader = new Loader();
+        DataBase.properties = loader.getProperties();
+    }
+    
   public static OracleDataSource getConnection() throws SQLException {
         OracleDataSource ods = new OracleDataSource();
         Identifikace1 identity = (Identifikace1) DataBase.getConnection();
-        String connectionString = "jdbc:oracle:thin:@gort.fit.vutbr.cz:1521:dbgort";
+        String connectionString = "jdbc:oracle:thin:@gort.fit.vutbr.cz:1521:dbgort"; //Строка подключения к базе данных
         ods.setURL(connectionString);
 
         ods.setUser(identity.getUsername());
