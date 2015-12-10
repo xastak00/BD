@@ -270,7 +270,7 @@ public class SeznamObjektu extends javax.swing.JPanel {
 
     private void SmazatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SmazatActionPerformed
         // TODO add your handling code here:
-         if(obrazek.isActive()){
+         if(obrazek.Active()){
             Sprava.setVisible(false);
             obrazek.setVisible(false);
             obrazek.setIcon(null);
@@ -303,7 +303,7 @@ public class SeznamObjektu extends javax.swing.JPanel {
    
     private void OtocitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OtocitActionPerformed
         // TODO add your handling code here:       
-         if(obrazek.isActive()){
+         if(obrazek.Active()){
             try {
                 Sprava.setVisible(false);
                 Obraz.rotateImage(obrazek.getIndex());

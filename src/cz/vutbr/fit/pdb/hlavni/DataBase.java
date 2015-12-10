@@ -30,9 +30,15 @@ private static Identifikace identifikace = null;
         DataBase.properties = loader.getProperties();
     }
     
+    
+    /**
+     * @return 
+     * @throws java.sql.SQLException
+    */
   public static OracleDataSource getConnection() throws SQLException {
         OracleDataSource ods = new OracleDataSource();
-        Identifikace1 identity = (Identifikace1) DataBase.getConnection();
+        Identifikace1 identity = DataBase.getIdentifikace().getIdentity();
+       // Identifikace1 identity = (Identifikace1) DataBase.getConnection();
         String connectionString = "jdbc:oracle:thin:@gort.fit.vutbr.cz:1521:dbgort"; //Строка подключения к базе данных
         ods.setURL(connectionString);
 

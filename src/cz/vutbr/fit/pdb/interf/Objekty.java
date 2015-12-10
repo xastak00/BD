@@ -178,10 +178,7 @@ public class Objekty extends JLabel{ //http://www.javadocexamples.com/javax/swin
         this.active = isActive;
     }
 
-    boolean isActive() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+  
    
 }
     
