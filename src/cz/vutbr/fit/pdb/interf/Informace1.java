@@ -5,15 +5,17 @@
  */
 package cz.vutbr.fit.pdb.interf;
 
-import cz.vutbr.fit.pdb.hlavni.DataBase;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import cz.vutbr.fit.pdb.Base.Bilding;
+import cz.vutbr.fit.pdb.system.DateTime;
+import java.awt.FlowLayout;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import oracle.jdbc.OracleResultSet;
-import oracle.jdbc.pool.OracleDataSource;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import javafx.event.ActionEvent;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 
 /**
  *
@@ -31,34 +33,58 @@ public class Informace1 extends javax.swing.JPanel {
     }
     public Informace1() throws SQLException {
         initComponents();
-        Typ_Combobox();
+       myInit();
     }
     
-    /**
-     *
-     * @throws SQLException
-     */
-    public void Typ_Combobox () throws SQLException  {
-    OracleDataSource ods = DataBase.getConnection();
-    try (Connection conn = ods.getConnection();)
-    {
-        conn.setAutoCommit(false);
-        
-         try (PreparedStatement stmt = conn.prepareStatement("SELECT * FROM type_bilding ");)
-         {
-              OracleResultSet rs = (OracleResultSet) stmt.executeQuery();
-              while(rs.next()){
-                  String typ_stavba = rs.getString("type_bildingcol");
-                  jComboBox1.addItem(typ_stavba);
-              }
-    }catch (Exception e){
-        JOptionPane.showMessageDialog(null,e);
-    }
-}       catch (SQLException ex) {
-            Logger.getLogger(Informace1.class.getName()).log(Level.SEVERE, null, ex);
+  
+    public void updateCombo(){
+        customer_databaseIdToComboBoxId = new HashMap<>();
+        Bilding modelBilding = new Bilding();
+        try{
+        int i = 0;
+         Map<Integer,String> list = modelBilding.getList();
+         String [] items = new String[list.size() + 1];
+         items[i++] = "";
+            for (Map.Entry<Integer, String> entry : list.entrySet()) {
+                items[i] = entry.getValue();
+                customer_databaseIdToComboBoxId.put(entry.getKey(), i);
+                i++;
+            }
+         comboBoxItems = items;
+        } catch (SQLException e) {
+            comboBoxItems = new String[]{"chyba při načítání.."};
         }
+        jComboBox2.setModel(new DefaultComboBoxModel(comboBoxItems));
+        jComboBox2.setSelectedIndex(0);
 }
 
+    private void myInit() {
+         
+        rezervaceOd_field.setToolTipText(DateTime.now());
+        rezervaceDo_field.setToolTipText(DateTime.now());
+        modelRezervace = new RezervaceModel();
+        
+        FlowLayout layout = new FlowLayout();
+        layout.setAlignment(FlowLayout.LEFT);
+        updateCombo();
+        ActionListener actionListener = new ActionListener() {
+ 
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                 jComboBox2 = (JComboBox) e.getSource();
+                
+            }
+        };
+           jComboBox2.addActionListener(actionListener);
+    }
+    
+        private Locale getLocale(String loc) {
+        if (loc != null && loc.length() > 0) {
+            return new Locale(loc);
+        } else {
+            return Locale.US;
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -72,8 +98,8 @@ public class Informace1 extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
-        jDateChooser2 = new com.toedter.calendar.JDateChooser();
+        rezervaceDo_field = new com.toedter.calendar.JDateChooser();
+        rezervaceOd_field = new com.toedter.calendar.JDateChooser();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         timeworking_table = new javax.swing.JTable();
@@ -108,11 +134,11 @@ public class Informace1 extends javax.swing.JPanel {
                 .addGap(22, 22, 22)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(rezervaceOd_field, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(rezervaceDo_field, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20))
         );
         jPanel1Layout.setVerticalGroup(
@@ -120,8 +146,8 @@ public class Informace1 extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rezervaceOd_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(rezervaceDo_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1)
                         .addComponent(jLabel2)))
@@ -171,9 +197,7 @@ public class Informace1 extends javax.swing.JPanel {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Stavby"));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.setToolTipText("");
 
         jLabel3.setText("Typ");
 
@@ -221,14 +245,14 @@ public class Informace1 extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jButton2.setText("Nový plán zaměstnanců");
+        jButton2.setText("Nový plán práce na směny");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
 
-        jButton3.setText("Změnit rozvrh budovy");
+        jButton3.setText("Změnit plan zamnestnancu");
 
         jButton4.setText("Zrušit plán");
 
@@ -262,7 +286,7 @@ public class Informace1 extends javax.swing.JPanel {
                         .addGroup(hlavníOknonInformaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
                             .addComponent(jLabel8))))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
         hlavníOknonInformaceLayout.setVerticalGroup(
             hlavníOknonInformaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -290,6 +314,8 @@ public class Informace1 extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jButton2.getAccessibleContext().setAccessibleName("Nový plán práce na směny");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -320,8 +346,6 @@ public class Informace1 extends javax.swing.JPanel {
     private javax.swing.JButton jButton4;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JComboBox jComboBox2;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
-    private com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -334,6 +358,11 @@ public class Informace1 extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private com.toedter.calendar.JDateChooser rezervaceDo_field;
+    private com.toedter.calendar.JDateChooser rezervaceOd_field;
     private javax.swing.JTable timeworking_table;
     // End of variables declaration//GEN-END:variables
+ private Map<Integer, Integer> customer_databaseIdToComboBoxId;
+ private String[] comboBoxItems;
 }
+
