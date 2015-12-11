@@ -58,7 +58,7 @@ public class Bilding extends Base {
     }
     
     /**
-     * Vrati seznam workers
+     * Vrati seznam objektu
      * @return Klic je ID_BILDING, hodnota je BILDING_COL
      * @throws SQLException
      */
@@ -94,7 +94,7 @@ public class Bilding extends Base {
     
         OracleDataSource ods = DataBase.getConnection();
         try (Connection conn = ods.getConnection(); 
-             PreparedStatement stmt = conn.prepareStatement("INSERT INTO WORKER (BILDING_COL, TYPE_BILDING_ID) VALUES(?,?)");
+             PreparedStatement stmt = conn.prepareStatement("INSERT INTO BILDING (BILDING_COL, TYPE_BILDING_ID) VALUES(?,?)");
              )
         {
             stmt.setString(1,nazev);   

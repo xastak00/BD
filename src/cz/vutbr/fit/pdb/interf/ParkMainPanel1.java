@@ -56,20 +56,22 @@ public class ParkMainPanel1 extends javax.swing.JFrame {
         registrace1 = new cz.vutbr.fit.pdb.interf.Registrace();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         registrace2 = new cz.vutbr.fit.pdb.interf.Registrace();
+        seznamObjektu1 = new cz.vutbr.fit.pdb.interf.SeznamObjektu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jTabbedPane1.addTab("tab1", registrace2);
+        jTabbedPane1.addTab("tab2", seznamObjektu1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE)
         );
 
         pack();
@@ -114,5 +116,6 @@ public class ParkMainPanel1 extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private cz.vutbr.fit.pdb.interf.Registrace registrace1;
     private cz.vutbr.fit.pdb.interf.Registrace registrace2;
+    private cz.vutbr.fit.pdb.interf.SeznamObjektu seznamObjektu1;
     // End of variables declaration//GEN-END:variables
 }

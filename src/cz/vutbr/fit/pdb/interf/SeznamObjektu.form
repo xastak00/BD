@@ -22,15 +22,6 @@
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
                           <Component id="Sprava" alignment="0" max="32767" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="Smazat" min="-2" pref="75" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="Otocit" min="-2" pref="75" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="Pridat" min="-2" pref="75" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="Ulozit" min="-2" pref="75" max="-2" attributes="0"/>
-                          </Group>
                           <Component id="Kontejner" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
@@ -40,6 +31,16 @@
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="Index" min="-2" pref="75" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="Podobne" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="Otocit" min="-2" pref="75" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="Pridat" min="-2" pref="75" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="Smazat" min="-2" pref="75" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                   </Group>
               </Group>
           </Group>
@@ -64,7 +65,7 @@
                   <Component id="Smazat" alignment="3" max="32767" attributes="0"/>
                   <Component id="Otocit" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="Pridat" alignment="3" max="32767" attributes="0"/>
-                  <Component id="Ulozit" alignment="3" max="32767" attributes="0"/>
+                  <Component id="Podobne" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -102,15 +103,13 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="SmazatActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="Ulozit">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Ulozit"/>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JButton" name="Pridat">
       <Properties>
         <Property name="text" type="java.lang.String" value="P&#x159;idat"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="PridatActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="Index">
       <Properties>
@@ -166,5 +165,13 @@
         </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JButton" name="Podobne">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Podobn&#xe9;"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="PodobneActionPerformed"/>
+      </Events>
+    </Component>
   </SubComponents>
 </Form>

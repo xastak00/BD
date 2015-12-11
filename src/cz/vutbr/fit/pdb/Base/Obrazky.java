@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;//https://docs.oracle.com/javase/tutorial/collections/interfaces/map.html
 import javax.swing.ImageIcon;
 import oracle.jdbc.OraclePreparedStatement;
@@ -29,13 +30,13 @@ public class Obrazky extends Base {
     
     
      /**
-     * Vlozi obrazek se zadanou cestou "cesta" k worker "worker"
+     * Vlozi obrazek se zadanou cestou "cesta" k bilding
      * @param cesta
-     * @param worker
+     * @param bilding
      * @return ID vlozeneho obrazku
      * @throws SQLException pokud dojde k chybe v pristupe k místnu atributa.
      */
-    public Integer insertImage(String cesta, int worker) throws SQLException {
+    public Integer insertImage(String cesta, int bilding) throws SQLException {
         
         Integer id;
         
@@ -44,9 +45,9 @@ public class Obrazky extends Base {
         {
             conn.setAutoCommit(false);
             
-            try (PreparedStatement stmt = conn.prepareStatement("INSERT INTO IMAGES (id, img, WORKER) VALUES (obrazky_seq.nextval, ORDSYS.ORDImage.init(), ?)"); )
+            try (PreparedStatement stmt = conn.prepareStatement("INSERT INTO IMAGES (id, img, BILDING) VALUES (obrazky_seq.nextval, ORDSYS.ORDImage.init(), ?)"); )
             {
-                stmt.setInt(1, worker);
+                stmt.setInt(1, bilding);
                 
                 stmt.executeUpdate();
             }
@@ -206,6 +207,52 @@ public class Obrazky extends Base {
             
             stmt.execute();
         }
+    }
+    
+        /**
+     * Vyhledá nejpodobnější obrázky na základě zadaného obrázku pomocí ID.
+     * @param id
+     * @param weightAC
+     * @param weightCH
+     * @param weightPC
+     * @param weightTX
+     * @return Podobné obrázky - klíč je ID obrázku, hodnota jeobjekt typu myIcon. Obrázky jsou seřazeny podle podobnosti.
+     * @throws SQLException
+     */
+    public Map<Integer, Objekty> getTheMostSimilar(Integer id, double weightAC, double weightCH, double weightPC, double weightTX) throws SQLException {
+        Map<Integer, Objekty> result = new LinkedHashMap<>();
+        OracleDataSource ods = DataBase.getConnection();
+         try (Connection conn = ods.getConnection();
+               OraclePreparedStatement pstmt = (OraclePreparedStatement)conn.prepareStatement("SELECT dst.id, dst.img, SI_ScoreByFtrList("
+                + "new SI_FeatureList(src.img_ac,?,src.img_ch,?,src.img_pc,?,src.img_tx,?),dst.img_si)"
+                + " as similarity FROM obrazky src, obrazky dst "
+                + "WHERE src.id = ? AND dst.id <> src.id ORDER BY similarity ASC")
+              )
+        {
+            //pstmt.setInt(1, customer);
+            pstmt.setDouble(1, weightAC);
+            pstmt.setDouble(2, weightCH);
+            pstmt.setDouble(3, weightPC);
+            pstmt.setDouble(4, weightTX);
+            pstmt.setInt(5, id);
+            
+            OracleResultSet rs = (OracleResultSet) pstmt.executeQuery();
+            
+            while (rs.next()) {
+                OrdImage img = (OrdImage) rs.getORAData("img", OrdImage.getORADataFactory());
+                byte[] tmp = img.getDataInByteArray();
+                
+                ImageIcon o = new ImageIcon(tmp);
+                Objekty tmpIcon = new Objekty(o);
+                tmpIcon.setScore(rs.getDouble("similarity"));
+                result.put(rs.getInt("id"), tmpIcon);
+            }
+        } 
+        catch (IOException e) {
+            result = null;
+        }
+        
+        return result;
     }
     
 }
