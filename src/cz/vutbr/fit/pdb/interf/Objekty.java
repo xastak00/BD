@@ -7,24 +7,25 @@ package cz.vutbr.fit.pdb.interf;
 
 
 import java.awt.Color;
-import java.awt.Image;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 
 
 
+
 /**
- *
+ * Zobrazeni obrazku
  * @author Olga
  */
 public class Objekty extends JLabel{ //http://www.javadocexamples.com/javax/swing/JLabel/setVerticalTextPosition(int%20textPosition).html
     
     private boolean active = false;
     private int index;
-    private String path = null;
+    private String cesta = null;
     private boolean focusable = true;
-    private Image im; 
+    private ImageIcon im; 
     private Double score = 0.0;
     
     //Konstruktor
@@ -44,7 +45,7 @@ public class Objekty extends JLabel{ //http://www.javadocexamples.com/javax/swin
      * Konstruktor, ktery nastavi navic tridni promennou im
      * @param o je obrazek
      */
-    public Objekty(Image o){
+    public Objekty(ImageIcon o){
        addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 ObrazkyMouseKlick(evt);
@@ -53,20 +54,19 @@ public class Objekty extends JLabel{ //http://www.javadocexamples.com/javax/swin
         setText("");
         setVerticalTextPosition(JLabel.BOTTOM);
         setHorizontalTextPosition(JLabel.CENTER);
-        //setIcon(o);
         im = o;
     }
     
     /**
-     * Prenastavi aktualni obrazek
+     * Nastavime aktualni obrazek
      * @param o je obrazek
      */
-    public void setNewIcon(Image o){
+    public void setNewImage(ImageIcon o){
         im = o;
     }
     
      /**
-     * Zpracovani kliku na ikonu
+     * Zpracovani kliku na obrazek
      * @param evt event
      */
     public void ObrazkyMouseKlick(java.awt.event.MouseEvent evt){
@@ -124,25 +124,25 @@ public class Objekty extends JLabel{ //http://www.javadocexamples.com/javax/swin
     
     /**
      * Nastavi cestu pro nacteni obrazku do DataBaze
-     * @param p cesta
+     * @param c cesta
      */
-    public void setPath(String p){
-        this.path = p;
+    public void setCesta(String c){
+        this.cesta = c;
     }
     
     /**
      * Vraci 
      * @return cesta
      */
-    public String getPath(){
-        return this.path;
+    public String getCesta(){
+        return this.cesta;
     }
     
     /**
      * Vrati 
      * @return aktualni zekobr
      */
-    public Image getObjekty(){
+    public ImageIcon getObjekty(){
         return this.im;
     }
     
@@ -172,11 +172,14 @@ public class Objekty extends JLabel{ //http://www.javadocexamples.com/javax/swin
     
     /**
      * Nastavi,ze obrazek je aktivni
-     * @param a aktivni
+     * @param isActive aktivni
      */
-    public void setActive(boolean a) {
-        this.active = a;
+    public void setActive (boolean isActive) {
+        this.active = isActive;
     }
+
+  
+   
 }
     
     

@@ -14,8 +14,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.Map;//https://docs.oracle.com/javase/tutorial/collections/interfaces/map.html
+import javax.swing.ImageIcon;
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jdbc.OracleResultSet;
 import oracle.jdbc.pool.OracleDataSource;//http://docs.oracle.com/cd/E11882_01/appdev.112/e13995/oracle/jdbc/pool/OracleDataSource.html
@@ -29,13 +29,13 @@ public class Obrazky extends Base {
     
     
      /**
-     * Vlozi obrazek se zadanou cestou "path" k worker "worker"
-     * @param path
+     * Vlozi obrazek se zadanou cestou "cesta" k worker "worker"
+     * @param cesta
      * @param worker
      * @return ID vlozeneho obrazku
      * @throws SQLException pokud dojde k chybe v pristupe k místnu atributa.
      */
-    public Integer insertImage(String path, int worker) throws SQLException {
+    public Integer insertImage(String cesta, int worker) throws SQLException {
         
         Integer id;
         
@@ -44,7 +44,7 @@ public class Obrazky extends Base {
         {
             conn.setAutoCommit(false);
             
-            try (PreparedStatement stmt = conn.prepareStatement("INSERT INTO obrazky (id, img, worker) VALUES (obrazky_seq.nextval, ORDSYS.ORDImage.init(), ?)"); )
+            try (PreparedStatement stmt = conn.prepareStatement("INSERT INTO IMAGES (id, img, WORKER) VALUES (obrazky_seq.nextval, ORDSYS.ORDImage.init(), ?)"); )
             {
                 stmt.setInt(1, worker);
                 
@@ -53,7 +53,7 @@ public class Obrazky extends Base {
             
             try (Statement stmt = conn.createStatement(); )
             {
-                OracleResultSet rs = (OracleResultSet) stmt.executeQuery("SELECT id, img FROM obrazky ORDER BY id DESC FOR UPDATE");
+                OracleResultSet rs = (OracleResultSet) stmt.executeQuery("SELECT id, img FROM IMAGES ORDER BY id DESC FOR UPDATE");
                 
                 if (!rs.next()) {
                     return null;
@@ -65,27 +65,27 @@ public class Obrazky extends Base {
                 rs.close();
                 
                 try {
-                    imgProxy.loadDataFromFile(path);
+                    imgProxy.loadDataFromFile(cesta);
                     imgProxy.setProperties();
                 }
                 catch (IOException e) {
                     return null;
                 }
                 
-                try (OraclePreparedStatement pstmt = (OraclePreparedStatement) conn.prepareStatement("UPDATE obrazky SET img = ? WHERE id = ?"))
+                try (OraclePreparedStatement pstmt = (OraclePreparedStatement) conn.prepareStatement("UPDATE IMAGES SET img = ? WHERE id = ?"))
                 {
                     pstmt.setORAData(1, imgProxy);
                     pstmt.setInt(2, id);
                     pstmt.executeUpdate();
                 }
                 
-                try (OraclePreparedStatement pstmt = (OraclePreparedStatement) conn.prepareStatement("UPDATE obrazky o SET o.img_si = SI_StillImage(o.img.getContent()) WHERE id = ?"))
+                try (OraclePreparedStatement pstmt = (OraclePreparedStatement) conn.prepareStatement("UPDATE IMAGES o SET o.img_si = SI_StillImage(o.img.getContent()) WHERE id = ?"))
                 {
                     pstmt.setInt(1, id);
                     pstmt.executeUpdate();
                 }
                 
-                try (OraclePreparedStatement pstmt = (OraclePreparedStatement) conn.prepareStatement("UPDATE obrazky SET "
+                try (OraclePreparedStatement pstmt = (OraclePreparedStatement) conn.prepareStatement("UPDATE IMAGES SET "
                         + "img_ac = SI_AverageColor(img_si), "
                         + "img_ch = SI_ColorHistogram(img_si), "
                         + "img_pc = SI_PositionalColor(img_si), "
@@ -104,7 +104,7 @@ public class Obrazky extends Base {
     }
 
   /**
-     * Vyhledame obrazky objektu workeru.
+     * Vyhledame obrazky objektu.
      * @param objekt
      * @return Obrazky objektu - klic je ID obrazku v DataBase, hodnota je objekt typu Objekty.
      * @throws SQLException
@@ -115,7 +115,7 @@ public class Obrazky extends Base {
         
         OracleDataSource ods = DataBase.getConnection();
         try (Connection conn = ods.getConnection();
-               OraclePreparedStatement pstmt = (OraclePreparedStatement)conn.prepareStatement("SELECT id, img FROM obrazky WHERE worker = ?"))
+               OraclePreparedStatement pstmt = (OraclePreparedStatement)conn.prepareStatement("SELECT id, img FROM IMAGES WHERE ID_BILDING = ?"))
         {
             pstmt.setInt(1, objekt);
             
@@ -125,8 +125,7 @@ public class Obrazky extends Base {
                 OrdImage img = (OrdImage) rs.getORAData("img", OrdImage.getORADataFactory());
                 byte[] tmp = img.getDataInByteArray();
                 
-                Image o = new Image(tmp) {};
-                
+                ImageIcon o = new ImageIcon (tmp);          
                 Objekty tmpImage = new Objekty(o);
                 result.put(rs.getInt("id"), tmpImage);
             }
@@ -152,7 +151,7 @@ public class Obrazky extends Base {
         
         OracleDataSource ods = DataBase.getConnection();
         try (Connection conn = ods.getConnection();
-             OraclePreparedStatement pstmt = (OraclePreparedStatement)conn.prepareStatement("SELECT img FROM obrazky WHERE id = ?"))
+             OraclePreparedStatement pstmt = (OraclePreparedStatement)conn.prepareStatement("SELECT img FROM IMAGES WHERE id = ?"))
         {
             pstmt.setInt(1, id);
             
@@ -184,7 +183,7 @@ public class Obrazky extends Base {
     public boolean delete(Integer id) throws SQLException {
         OracleDataSource ods = DataBase.getConnection();
         try (Connection conn = ods.getConnection(); 
-             PreparedStatement stmt = conn.prepareStatement("DELETE FROM obrazky WHERE id = ?");
+             PreparedStatement stmt = conn.prepareStatement("DELETE FROM IMAGES WHERE id = ?");
              )
         {
             stmt.setInt(1, id);

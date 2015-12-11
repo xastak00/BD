@@ -19,8 +19,8 @@ public class AttractionPark {
     * @author Iuliia Ogloblina
     */
  public static void main(String[] args) {
-      //  ParkMainPanel1 park = new ParkMainPanel1();
-      //  park.setLocationRelativeTo(null);
-       // park.setVisible(true); /* метод, с помощью которого задается видимость */
+        ParkMainPanel1 park = new ParkMainPanel1();
+        park.setLocationRelativeTo(null);
+        park.setVisible(true); /* метод, с помощью которого задается видимость */
     }
 }
