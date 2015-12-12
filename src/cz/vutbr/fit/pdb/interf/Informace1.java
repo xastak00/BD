@@ -62,7 +62,7 @@ public class Informace1 extends javax.swing.JPanel {
          
         rezervaceOd_field.setToolTipText(DateTime.now());
         rezervaceDo_field.setToolTipText(DateTime.now());
-        modelRezervace = new RezervaceModel();
+
         
         FlowLayout layout = new FlowLayout();
         layout.setAlignment(FlowLayout.LEFT);

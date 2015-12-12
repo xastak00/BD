@@ -306,9 +306,6 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Nov&#xfd; pl&#xe1;n pr&#xe1;ce na sm&#x11b;ny"/>
           </Properties>
-          <AccessibilityProperties>
-            <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Nov&#xfd; pl&#xe1;n pr&#xe1;ce na sm&#x11b;ny"/>
-          </AccessibilityProperties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
           </Events>
